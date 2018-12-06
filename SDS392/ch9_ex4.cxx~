@@ -1,0 +1,25 @@
+#include <iostream>
+#include <cmath>
+using std::cin;
+using std::cout;
+using std::endl;
+
+struct vector {double x; double y;};
+double vector_inner_products (struct vector v1, struct vector v2){
+  double inner_product;
+  inner_product = {v1.x*v2.x+v1.y+v2.y};
+  return inner_product;
+} 
+
+int main() {
+  struct vector v1;
+  struct vector v2;
+  double inner_product;
+  cout << "Enter components of first vector:" << endl;
+  cin >> v1.x >> v1.y;
+  cout << "Enter components of second  vector:" << endl;
+  cin >> v2.x >> v2.y;
+  inner_product = vector_inner_product(v1,v2);
+  cout << "The result of inner product is (" << inner_product << endl;
+  return 0;
+}

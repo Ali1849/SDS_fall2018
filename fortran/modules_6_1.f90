@@ -1,0 +1,20 @@
+module mod_ex6_1
+  type point
+     real :: x,y
+   contains
+     procedure, public :: lenght
+     procedure, public :: distance
+  end type point
+contains
+  real(4) function lenght(p1)
+    implicit none
+    class (point) :: p1
+    lenght = sqrt(p1%x**2+p1%y**2)
+  end function  lenght
+  real(4) function distance(p1,p2)
+    implicit none
+    class (point) :: p1
+    type(point), intent(in) :: p2
+    distance =  sqrt((p1%x-p2%x)**2+(p1%y-p2%y)**2)
+  end function distance
+end module mod_ex6_1

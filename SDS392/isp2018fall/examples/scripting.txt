@@ -1,0 +1,464 @@
+[eijkhout@isp02 examples]$ echo $SHELL
+/bin/bash
+[eijkhout@isp02 examples]$ ls
+angle.cxx                 discussion_pascal.txt  head.cxx       linklist.o               rangenum2.cxx
+aplusb.cxx                discussion_prime.txt   header         Makefile                 rangenum3.cxx
+caesar.txt                discussion_square.txt  indent.cxx     pascal_discussion.txt~   rangenum4.cxx
+collatz.cxx               discussion_struct.txt  linear.cxx     point.cxx                swap.cxx
+discussion_goldbach.txt   exercise6_2.cc         linklist       prime_test_skeleton.cxx
+discussion_ij.txt         exercise6_3b.cc        linklist.cxx   printletter.cxx
+discussion_mercurial.txt  getline.cxx            linklist.cxx~  rangenum1.cxx
+[eijkhout@isp02 examples]$ a=2
+[eijkhout@isp02 examples]$ echo a
+a
+[eijkhout@isp02 examples]$ echo $a
+2
+[eijkhout@isp02 examples]$ b=3
+[eijkhout@isp02 examples]$ echo $a+$b
+2+3
+[eijkhout@isp02 examples]$ echo $(( a+b ))
+5
+[eijkhout@isp02 examples]$ if [ $a -eq 2 ] ; then echo true ; else echo false ; fi
+true
+[eijkhout@isp02 examples]$ if [ $a -eq 2 ] ; then echo true ; echo true ; else echo false ; echo false ; fi
+true
+true
+[eijkhout@isp02 examples]$ for x in a b c d ; do echo $x ; done
+a
+b
+c
+d
+[eijkhout@isp02 examples]$ for f in *.txt ; do ls -l $f ; done
+-rw-r--r-- 1 eijkhout G-25072 80 Oct 11 14:13 caesar.txt
+-rw-r--r-- 1 eijkhout G-25072 3427 Oct  9 09:55 discussion_goldbach.txt
+-rw-r--r-- 1 eijkhout G-25072 2212 Sep 20 12:31 discussion_ij.txt
+-rw-r--r-- 1 eijkhout G-25072 2788 Sep 20 14:43 discussion_mercurial.txt
+-rw-r--r-- 1 eijkhout G-25072 2973 Nov  1 12:40 discussion_pascal.txt
+-rw-r--r-- 1 eijkhout G-25072 2680 Sep 25 09:26 discussion_prime.txt
+-rw-r--r-- 1 eijkhout G-25072 1509 Oct 18 12:30 discussion_square.txt
+-rw-r--r-- 1 eijkhout G-25072 791 Oct  2 12:30 discussion_struct.txt
+[eijkhout@isp02 examples]$ emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ # this is a comment
+[eijkhout@isp02 examples]$ echo foo # type foo
+foo
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ cat demoscript
+#!/bin/bash
+
+ls *.txt
+
+[eijkhout@isp02 examples]$ # that is a shell script. how do you execute it?
+[eijkhout@isp02 examples]$ demoscript
+-bash: demoscript: command not found
+[eijkhout@isp02 examples]$ # try with dot-slash:
+[eijkhout@isp02 examples]$ ./demoscript
+-bash: ./demoscript: Permission denied
+[eijkhout@isp02 examples]$ # let's make it executable:
+[eijkhout@isp02 examples]$ chmod +x demoscript
+[eijkhout@isp02 examples]$ ./demoscript
+caesar.txt		 discussion_ij.txt	   discussion_pascal.txt  discussion_square.txt
+discussion_goldbach.txt  discussion_mercurial.txt  discussion_prime.txt   discussion_struct.txt
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ ls
+angle.cxx                discussion_mercurial.txt  getline.cxx   linklist.cxx~            rangenum1.cxx
+aplusb.cxx               discussion_pascal.txt     head.cxx      linklist.o               rangenum2.cxx
+caesar.txt               discussion_prime.txt      header        Makefile                 rangenum3.cxx
+collatz.cxx              discussion_square.txt     indent.cxx    pascal_discussion.txt~   rangenum4.cxx
+demoscript               discussion_struct.txt     linear.cxx    point.cxx                swap.cxx
+discussion_goldbach.txt  exercise6_2.cc            linklist      prime_test_skeleton.cxx
+discussion_ij.txt        exercise6_3b.cc           linklist.cxx  printletter.cxx
+[eijkhout@isp02 examples]$ # let's make the extension a parameter
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ !cat
+cat demoscript
+#!/bin/bash
+
+ls *.$1
+
+[eijkhout@isp02 examples]$ # now we specify one parameter:
+[eijkhout@isp02 examples]$ ./demoscript txt
+caesar.txt		 discussion_ij.txt	   discussion_pascal.txt  discussion_square.txt
+discussion_goldbach.txt  discussion_mercurial.txt  discussion_prime.txt   discussion_struct.txt
+[eijkhout@isp02 examples]$ ./demoscript cxx
+angle.cxx    getline.cxx  linear.cxx	prime_test_skeleton.cxx  rangenum2.cxx	swap.cxx
+aplusb.cxx   head.cxx	  linklist.cxx	printletter.cxx		 rangenum3.cxx
+collatz.cxx  indent.cxx   point.cxx	rangenum1.cxx		 rangenum4.cxx
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ # accident waiting to happen?
+[eijkhout@isp02 examples]$ ./demoscript
+ls: cannot access *.: No such file or directory
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ !cat
+cat demoscript
+#!/bin/bash
+
+if [ $# -lt 1 ] ; then
+  echo "You should have specified an argument"
+  exit 1
+fi
+
+ls *.$1
+
+[eijkhout@isp02 examples]$ ./demoscript
+You should have specified an argument
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ # script to display line counts
+[eijkhout@isp02 examples]$ !cat
+cat demoscript
+WC(1)                                        User Commands                                        WC(1)
+
+NAME
+       wc - print newline, word, and byte counts for each file
+
+SYNOPSIS
+       wc [OPTION]... [FILE]...
+       wc [OPTION]... --files0-from=F
+
+DESCRIPTION
+       Print  newline,  word,  and byte counts for each FILE, and a total line if more than one FILE is
+       specified.  With no FILE, or when FILE is -, read standard input.  A word is  a  non-zero-length
+       sequence  of characters delimited by white space.  The options below may be used to select which
+       counts are printed, always in the following order: newline, word, character, byte, maximum  line
+       length.
+
+       -c, --bytes
+              print the byte counts
+
+       -m, --chars
+              print the character counts
+
+       -l, --lines
+              print the newline counts
+
+       --files0-from=F
+              read  input  from  the  files specified by NUL-terminated names in file F; If F is - then
+              read names from standard input
+
+       -L, --max-line-length
+#!/bin/bash
+
+if [ $# -lt 1 ] ; then
+  echo "You should have specified an argument"
+  exit 1
+fi
+
+# count the lines
+for f in *.$1 ; do
+  wc -l $f
+done
+
+
+[eijkhout@isp02 examples]$ !./d
+./demoscript
+You should have specified an argument
+[eijkhout@isp02 examples]$ ./demoscript txt
+2 caesar.txt
+135 discussion_goldbach.txt
+88 discussion_ij.txt
+69 discussion_mercurial.txt
+140 discussion_pascal.txt
+110 discussion_prime.txt
+124 discussion_square.txt
+25 discussion_struct.txt
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ man wc
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ # display line count with out names:
+[eijkhout@isp02 examples]$ !cat
+cat demoscript
+#!/bin/bash
+
+if [ $# -lt 1 ] ; then
+  echo "You should have specified an argument"
+  exit 1
+fi
+
+# count the lines
+for f in *.$1 ; do
+  cat $f | wc -l
+done
+
+
+[eijkhout@isp02 examples]$ !./d
+./demoscript txt
+2
+135
+88
+69
+140
+110
+124
+25
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ # with backticks:
+[eijkhout@isp02 examples]$ !cat
+cat demoscript
+#!/bin/bash
+
+if [ $# -lt 1 ] ; then
+  echo "You should have specified an argument"
+  exit 1
+fi
+
+# count the lines
+for f in *.$1 ; do
+  # use back tick to reverse execution order
+  count=`cat $f | wc -l`
+  echo "File $f has $count lines"
+done
+
+
+[eijkhout@isp02 examples]$ !./d
+./demoscript txt
+File caesar.txt has 2 lines
+File discussion_goldbach.txt has 135 lines
+File discussion_ij.txt has 88 lines
+File discussion_mercurial.txt has 69 lines
+File discussion_pascal.txt has 140 lines
+File discussion_prime.txt has 110 lines
+File discussion_square.txt has 124 lines
+File discussion_struct.txt has 25 lines
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ # with conditional
+[eijkhout@isp02 examples]$ !cat
+cat demoscript
+#!/bin/bash
+
+if [ $# -lt 1 ] ; then
+  echo "You should have specified an argument"
+  exit 1
+fi
+
+# count the lines
+for f in *.$1 ; do
+  # use back tick to reverse execution order
+  count=`cat $f | wc -l`
+  if [ $count -gt 100 ] ; then
+    echo "making a backup of $f"
+    cp $f $f.bak
+  else
+    echo "we dont' care about $f"
+  fi
+done
+
+
+[eijkhout@isp02 examples]$ !./d
+./demoscript txt
+we dont' care about caesar.txt
+making a backup of discussion_goldbach.txt
+we dont' care about discussion_ij.txt
+we dont' care about discussion_mercurial.txt
+making a backup of discussion_pascal.txt
+making a backup of discussion_prime.txt
+making a backup of discussion_square.txt
+we dont' care about discussion_struct.txt
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ # new script: testing
+[eijkhout@isp02 examples]$ chmod +x testerscript
+[eijkhout@isp02 examples]$ ./testerscript
+angle.cxx                    discussion_square.txt        Makefile
+aplusb.cxx                   discussion_square.txt.bak    pascal_discussion.txt~
+caesar.txt                   discussion_struct.txt        point.cxx
+collatz.cxx                  exercise6_2.cc               prime_test_skeleton.cxx
+demoscript                   exercise6_3b.cc              printletter.cxx
+demoscript~                  getline.cxx                  rangenum1.cxx
+discussion_goldbach.txt      head.cxx                     rangenum2.cxx
+discussion_goldbach.txt.bak  header/                      rangenum3.cxx
+discussion_ij.txt            indent.cxx                   rangenum4.cxx
+discussion_mercurial.txt     linear.cxx                   swap.cxx
+discussion_pascal.txt        linklist                     testerscript
+discussion_pascal.txt.bak    linklist.cxx                 testerscript~
+discussion_prime.txt         linklist.cxx~
+discussion_prime.txt.bak     linklist.o
+[eijkhout@isp02 examples]$ ./testerscript collatz.cxx
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ # existence test
+[eijkhout@isp02 examples]$ cat testerscript
+#!/bin/bash
+
+if [ $# -lt 1 ] ; then
+  echo "You should have specified an argument"
+  exit 1
+fi
+
+if [ ! -f $1 ] ; then
+  echo "File does not exist!"
+  exit 1
+fi
+
+echo "We are going to test program $1"
+
+[eijkhout@isp02 examples]$ ./testerscript collatz.c
+File does not exist!
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ # test a program that does not compile
+[eijkhout@isp02 examples]$ !./
+./testerscript collatz.c
+File does not exist!
+[eijkhout@isp02 examples]$ ./testerscript collatz.cxx
+We are going to test program collatz.cxx
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crt1.o: In function `_start':
+(.text+0x20): undefined reference to `main'
+Compilation failed
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ ./testerscript collatz.cxx
+We are going to test program collatz.cxx
+Compilation failed
+[eijkhout@isp02 examples]$ # junk output goes to null
+[eijkhout@isp02 examples]$ !cat
+cat testerscript
+#!/bin/bash
+
+if [ $# -lt 1 ] ; then
+  echo "You should have specified an argument"
+  exit 1
+fi
+
+if [ ! -f $1 ] ; then
+  echo "File does not exist!"
+  exit 1
+fi
+
+echo "We are going to test program $1"
+
+icpc -o testprogram $1 >/dev/null 2&>1
+
+if [ ! -f testprogram ] ; then
+  echo "Compilation failed"
+  exit 1
+fi
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ !./
+./testerscript collatz.cxx
+We are going to test program collatz.cxx
+Compilation failed
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ icpc -c collatz.cxx
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ icpc -c collatz.cxx
+[eijkhout@isp02 examples]$ !./t
+./testerscript collatz.cxx
+We are going to test program collatz.cxx
+Compilation failed
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ ./testerscript collatz.cxx
+We are going to test program collatz.cxx
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ ./testerscript collatz.cxx
+We are going to test program collatz.cxx
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ ./testprogram
+The longest length is 179; it happened at 871
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ # find all object-oriented programs
+[eijkhout@isp02 examples]$ grep class *.cxx
+linear.cxx:class Point {
+linear.cxx:class LinearFunction {
+linklist.cxx:class Node {
+point.cxx:class Point {
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ ./testprogram | grep 179
+The longest length is 179; it happened at 871
+[eijkhout@isp02 examples]$ ./testprogram | grep 179 | wc -l
+1
+[eijkhout@isp02 examples]$ ^79^89
+./testprogram | grep 189 | wc -l
+0
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ # test for occurence of 179
+[eijkhout@isp02 examples]$ !./t
+./testprogram | grep 189 | wc -l
+0
+[eijkhout@isp02 examples]$ ./testerscript collatz.cxx
+We are going to test program collatz.cxx
+./testerscript: line 26: unexpected EOF while looking for matching `"'
+./testerscript: line 29: syntax error: unexpected end of file
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+
+[3]+  Stopped                 emacs demoscript
+[eijkhout@isp02 examples]$ ./testerscript collatz.cxx
+We are going to test program collatz.cxx
+Yay!
+[eijkhout@isp02 examples]$ fg
+emacs demoscript
+

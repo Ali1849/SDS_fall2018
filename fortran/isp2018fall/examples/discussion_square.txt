@@ -1,0 +1,124 @@
+%%%%%%%%%%%%% best solution
+
+class Square : public Rectangle{
+public:
+  Square (Point bl, float s) : Rectangle ( bl, s, s) {};
+};
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%% this is "has-a" instead of "is-a"
+
+class Square {
+  Rectangle b1;
+  Square () {
+    b1 = Rectangle (Point b1 , float w, float h)
+      };
+};
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%% good, but slightly less elegant
+
+class Square : public Rectangle{
+public:
+  Square(Point bl, float w){//constructor
+    point1 = bl;
+    point2 = {point1.x_coordinate() + w, point1.y_coordinate() + w};
+  };
+};
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%% please critique
+
+class Square : public Rectangle {
+private:
+  float side;
+public:
+  Square(Point b1, float s) : Rectangle(b1,s,s) {side = s;};
+  float area() {return get_area();}
+  float get_side() { return side;}
+};
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%% please critique
+
+class Square : public Rectangle {
+public:
+  float square_area(float side1, float side2){
+    if (side1 == side2)
+      return side1*side2;
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%% one more
+
+class Square : public Rectangle {
+public:
+  Square(Point b1, double x, double y) : Rectangle(b1,x,y) {
+    if(widthis() != heightis()){
+      cout << "ERROR: not a square: width=" << widthis() << " vs height=" << heightis() << endl;
+    };
+  };
+  Square(Point b1, double x) : Rectangle(b1,x,x) {};
+};
+
+
+
+
+
+
+
+
+
+%%%%%%%%% good 
+
+class Square : public Rectangle {
+private: float sideSelf;
+public:
+  Square (Point p, float side) : Rectangle(p,side,side) {
+    sideSelf = side;
+  };
+  float getSide(){
+    return sideSelf;
+  }
+};
+

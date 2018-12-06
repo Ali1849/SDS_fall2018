@@ -1,0 +1,20 @@
+#include <iostream>
+#include <cmath>
+using std::cin;
+using std::cout;
+using std::endl;
+
+int main() {
+  int n;
+  char ch;
+  cout << "Enter an integer between 1 and 27: ";
+  cin >> n;
+  if ( n > 0 ){
+    ch = n+96;
+    cout << n << "  :  "  << ch << endl;
+  };
+  if ( n < 0 ){
+    ch = -n + 64;
+    cout << n << "  :  "  << ch << endl;
+  };
+}

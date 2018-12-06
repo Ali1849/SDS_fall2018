@@ -1,0 +1,16 @@
+program ex2_2
+  implicit none
+  integer :: u,v,w,n = 0
+  
+  do u = 1,99
+     do v = u+1,99
+        do w = u+1,99
+           if ( u**2 + v**2 == w**2 ) then 
+              print *,u,v,w
+              n=n+1
+           end if
+        end do
+     end do
+  end do
+  print *,n
+end program ex2_2

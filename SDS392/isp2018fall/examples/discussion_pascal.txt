@@ -1,0 +1,140 @@
+%%%%%%%%%% good.
+
+class triangle {
+private:
+  int rows, cols;
+  vector<vector<int>> elements;
+ public:
+  triangle(int n){
+    rows = n; cols = n;
+    elements = vector<vector<int>>(n, vector<int>(n));};
+  void set(int i, int j, double v){
+    elements.at(i).at(j) = v;};
+
+%%%%%%%%%%%%%%%% not quite so good
+
+  vector<vector<double>> elements;
+
+%%%%%%%%%%%%%%% the square solution
+
+  vector<int> array;
+  [...]
+  int get(int row,int col) {
+    return array.at( (row-1)*size + (col-1) );
+  };
+  int set(int row,int col,int value) {
+    array.at( (row-1)*size + (col-1) ) = value;
+  };
+
+%%%%%%%%%%%% optimized solution
+
+class pascal {
+private:
+  int rows;
+  vector<long int>  coeffs;
+public:
+  [...]
+  long int get(int i,int j) {
+    return coeffs.at(i*(i+1)/2+j);
+  };
+
+%%%%%%%%%%%%%% unnecessary recursion
+
+  // Calculate value of Binomial Coefficient p(r,c)
+  // I had to use this formula, because the one in the slides,
+  // caused overflow issues.
+  /*  int get(int r, int c){
+    if ( c == 0 || c == r)
+      return 1;
+    return get(r-1,c-1) + get(r-1,c);
+    };*/
+  long get(int r, int c){
+    if ( c == 0 || c == r)
+      return 1;
+    if (c > r/2)
+      return get(r,r-c);
+    return r*get(r-1,c-1)/c;
+  };
+
+
+%%%%%%%%%%%%%%%% nice. clean
+
+  void set_triangle_coefficients(){
+    for(int i = 0; i < dimension; i++){
+      for(int j = 0; j <= i; j++){
+        if(j == 0 || j == i){
+          set(i, j, 1);
+        }else{
+          set(i, j, get(i-1,j-1) + get(i-1,j));
+        }
+      }
+    }
+  }
+
+
+%%%%%%%%%%%%% Danger Will Robinson!
+
+long int max_Num = cal_factorial(rows-1)/(cal_factorial((rows-1)/2)*cal_factorial((rows-1)/2)); // The maximun coefficient is at the middle of the last row;
+
+%%%%%%%%%%%%%%% passes the tester, not what was asked
+
+class Pascal {
+private:
+  int rows;
+public:
+  Pascal(int row) {rows = row;}
+  int printPascal{
+  for (int i = 0; i < rows; i++)
+    {
+      int val = 1;
+      for (int j = 1; j < (rows - i); j++)
+        {
+          cout << " ";
+        }
+      for (int k = 0; k <= i; k++)
+        {
+          cout << " " << val;
+          val = val * (i - k) / (k + 1);
+        }
+      cout << endl;
+    }
+  cout << endl;
+  };
+  return 0;
+};
+
+%%%%%%%%%%%%%% No. Really: No.
+
+  long int get(long int &val, int i, int j){
+    val = val * (i-j) / (j+1);
+    return val;
+  }
+  void print(long int m){
+    for (int i = 0; i < rows; i++)
+      {
+        long int val = 1;
+        for (int k = 1; k < (rows - i); k++)
+          {
+            cout << " ";
+          }
+        for (int j = 0; j <= i; j++)
+          {
+            if (val % m != 0){
+              cout <<"*"<<" ";
+            } else {
+              cout <<" "<<" ";
+            }
+            get(val,i,j);
+          }
+        cout << endl;
+      }
+  }
+
+%%%%%%%%%%%%%%%% too much looking at stackoverflow is not good for you
+
+  void print_row(vector<int> dummy){
+    for (vector<int>::iterator i = dummy.begin(); i != dummy.end(); ++i)
+      cout<<*i<<" ";
+    cout<<endl;
+  }
+

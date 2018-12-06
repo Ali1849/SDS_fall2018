@@ -1,0 +1,417 @@
+[eijkhout@isp02 examples]$ mkdir header
+[eijkhout@isp02 examples]$ cd !$
+cd header
+[eijkhout@isp02 header]$ emacs program1.cxx
+
+[1]+  Stopped                 emacs program1.cxx
+[eijkhout@isp02 header]$ icpc -o program1 program1.cxx && ./program1
+[eijkhout@isp02 header]$ fg
+emacs program1.cxx
+
+[1]+  Stopped                 emacs program1.cxx
+[eijkhout@isp02 header]$ # now I have a main:
+[eijkhout@isp02 header]$ cat program1.cxx
+int main() {
+  f();
+  return 0;
+}
+[eijkhout@isp02 header]$ # and I have a fuction:
+[eijkhout@isp02 header]$ cat function1.cxx
+void f() { return; }
+[eijkhout@isp02 header]$ # we need to compile them seperately
+[eijkhout@isp02 header]$ icpc -o program1.o program1.cxx
+program1.cxx(2): error: identifier "f" is undefined
+    f();
+    ^
+
+compilation aborted for program1.cxx (code 2)
+[eijkhout@isp02 header]$ # sorry.
+[eijkhout@isp02 header]$ !?pro?:s/program/function/:g&:p
+icpc -o function1.o function1.cxx
+[eijkhout@isp02 header]$ icpc -o function1.o function1.cxx
+/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../lib64/crt1.o: In function `_start':
+(.text+0x20): undefined reference to `main'
+[eijkhout@isp02 header]$ # sorry again. That was compiling to an executable
+[eijkhout@isp02 header]$ # we need to compile to an object file
+[eijkhout@isp02 header]$ icpc -c function1.o function1.cxx
+icpc: error #10236: File not found:  'function1.o'
+[eijkhout@isp02 header]$ # !!#$#$!#$@#$@%#$%#$%$%#
+[eijkhout@isp02 header]$ fg
+emacs program1.cxx
+
+[1]+  Stopped                 emacs program1.cxx
+[eijkhout@isp02 header]$ icpc -c function1.cxx
+[eijkhout@isp02 header]$ # what does this gives me?
+[eijkhout@isp02 header]$ ls
+function1.cxx  function1.cxx~  function1.o  program1  program1.cxx  program1.cxx~
+[eijkhout@isp02 header]$ # the extension ".o" indicates an "object" file
+[eijkhout@isp02 header]$ icpc -c program1.cxx
+program1.cxx(2): error: identifier "f" is undefined
+    f();
+    ^
+
+compilation aborted for program1.cxx (code 2)
+[eijkhout@isp02 header]$ # my attempt to compile the program failed
+[eijkhout@isp02 header]$ fg
+emacs program1.cxx
+
+[1]+  Stopped                 emacs program1.cxx
+[eijkhout@isp02 header]$ # after my edits, here's the function:
+[eijkhout@isp02 header]$ cat function1.cxx
+#include <iostream>
+using std::cin;
+using std::cout;
+using std::endl;
+#include <cmath>
+
+void f(int i) {
+  int x = 5+i;
+  cout << x << endl;
+}
+
+[eijkhout@isp02 header]$ # recompile:
+[eijkhout@isp02 header]$ icpc -c function1.cxx
+[eijkhout@isp02 header]$ # now compile the main into an object file
+[eijkhout@isp02 header]$ !-2:s/function/program/
+icpc -c program1.cxx
+program1.cxx(1): error #11: unrecognized preprocessing directive
+  # the next line is header or prototype
+    ^
+
+compilation aborted for program1.cxx (code 2)
+[eijkhout@isp02 header]$ fg
+emacs program1.cxx
+
+[1]+  Stopped                 emacs program1.cxx
+[eijkhout@isp02 header]$ icpc -c program1.cxx
+[eijkhout@isp02 header]$ # and now we have two object files:
+[eijkhout@isp02 header]$ ls
+function1.cxx   function1.o  program1.cxx   program1.o
+function1.cxx~  program1     program1.cxx~
+[eijkhout@isp02 header]$ # we need to link them together:
+[eijkhout@isp02 header]$ icpc -o firstprogram program1.o function1.o
+[eijkhout@isp02 header]$ # and now I can execute:
+[eijkhout@isp02 header]$ ./firstprogram
+8
+[eijkhout@isp02 header]$ fg
+emacs program1.cxx
+
+[1]+  Stopped                 emacs program1.cxx
+[eijkhout@isp02 header]$ icpc -c function1.cxx
+[eijkhout@isp02 header]$ icpc -o firstprogram program1.o function1.o
+program1.o: In function `main':
+program1.cxx:(.text+0x30): undefined reference to `f(int)'
+[eijkhout@isp02 header]$ icpc -c program1.cxx
+[eijkhout@isp02 header]$ icpc -o firstprogram program1.o function1.o
+program1.o: In function `main':
+program1.cxx:(.text+0x30): undefined reference to `f(int)'
+[eijkhout@isp02 header]$ fg
+emacs program1.cxx
+
+[1]+  Stopped                 emacs program1.cxx
+[eijkhout@isp02 header]$ # now I have a header
+[eijkhout@isp02 header]$ cat header1.h
+void f(int i,int j);
+
+[eijkhout@isp02 header]$ # recompile function:
+[eijkhout@isp02 header]$ icpc -c function1.cxx
+function1.cxx(9): catastrophic error: cannot open source file "header.h"
+  #include "header.h"
+                     ^
+
+compilation aborted for function1.cxx (code 4)
+[eijkhout@isp02 header]$ fg
+emacs program1.cxx
+
+[1]+  Stopped                 emacs program1.cxx
+[eijkhout@isp02 header]$ icpc -c function1.cxx
+[eijkhout@isp02 header]$ !!:s/function/program/
+icpc -c program1.cxx
+program1.cxx(5): error #165: too few arguments in function call
+    f(3);
+       ^
+
+compilation aborted for program1.cxx (code 2)
+[eijkhout@isp02 header]$ # this is good!
+[eijkhout@isp02 header]$ fg
+emacs program1.cxx
+
+[1]+  Stopped                 emacs program1.cxx
+[eijkhout@isp02 header]$ # fixed:
+[eijkhout@isp02 header]$ cat program1.cxx
+// include the header that defines f
+#include "header1.h"
+
+int main() {
+  f(3,5);
+  return 0;
+}
+[eijkhout@isp02 header]$ !?icpc?
+File Edit Options Buffers Tools Help
+
+
+
+
+
+
+%%%%%%%%% good
+
+class Square : public Rectangle {
+private: float sideSelf;
+public:
+  Square (Point p, float side) : Rectangle(p,side,side) {
+    sideSelf = side;
+  };
+  float getSide(){
+    return sideSelf;
+  }
+};
+
+
+
+
+-UU-:----F1  discussion_square.txt   Bot L109   (Text) ---------------------------------
+File Edit Options Buffers Tools C++ Help
+#include <iostream>
+using std::cin;
+using std::cout;
+using std::endl;
+#include <cmath>
+
+class Point {
+private:
+  double x,y;
+};
+class Rectangle	{
+private:
+  Point bl;
+  double w,h;
+public:
+  Rectangle(Point bl,double w,double h)
+    : bl(bl),w(w),h(h) {};
+  double area() { return w*h; };
+};
+
+class Square : public Rectangle {
+public:
+-UU-:**--F1  square2.cxx    Top L18    (C++/l Abbrev) ----------------------------------
+icpc -c program1.cxx
+[eijkhout@isp02 header]$ history | grep first | grep icpc
+ 1041  icpc -o firstprogram program1.o function1.o
+ 1046  icpc -o firstprogram program1.o function1.o
+ 1048  icpc -o firstprogram program1.o function1.o
+ 1062  history | grep first | grep icpc
+[eijkhout@isp02 header]$ !1048
+icpc -o firstprogram program1.o function1.o
+[eijkhout@isp02 header]$ ./firstprogram
+8
+[eijkhout@isp02 header]$ fg
+emacs program1.cxx
+
+[1]+  Stopped                 emacs program1.cxx
+[eijkhout@isp02 header]$ fg
+emacs program1.cxx
+
+[1]+  Stopped                 emacs program1.cxx
+[eijkhout@isp02 header]$ fg
+emacs program1.cxx
+[eijkhout@isp02 header]$ cd ..
+[eijkhout@isp02 examples]$ fg
+-bash: fg: current: no such job
+[eijkhout@isp02 examples]$ emacs discussion_square.txt
+
+[1]+  Stopped                 emacs discussion_square.txt
+[eijkhout@isp02 examples]$ icpc -o square2 square2.cxx && ./square2
+square2.cxx(24): error: identifier "widthis" is undefined
+      if(widthis() != heightis()){
+         ^
+
+square2.cxx(24): error: identifier "heightis" is undefined
+      if(widthis() != heightis()){
+                      ^
+
+square2.cxx(32): error: no instance of constructor "Square::Square" matches the argument list
+            argument types are: ({...}, int)
+    Square sq1( {0.,0.}, 5);
+                ^
+square2.cxx(21): note: this candidate was rejected because mismatch in count of arguments
+  class Square : public Rectangle {
+        ^
+square2.cxx(21): note: this candidate was rejected because mismatch in count of arguments
+  class Square : public Rectangle {
+        ^
+square2.cxx(28): note: this candidate was rejected because arguments do not match
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+    ^
+square2.cxx(23): note: this candidate was rejected because mismatch in count of arguments
+    Square(Point b1, double x, double y) : Rectangle(b1,x,y) {
+    ^
+
+File Edit Options Buffers Tools C++ Help
+  double x,y;
+};
+class Rectangle {
+private:
+  Point bl;
+  double w,h;
+public:
+  Rectangle(Point bl,double w,double h)
+    : bl(bl),w(w),h(h) {};
+  double area() { return w*h; };
+};
+
+class Square : public Rectangle {
+public:
+  Square(Point b1, double x, double y) : Rectangle(b1,x,y) {
+    if(widthis() != heightis()){
+      cout << "ERROR: not a square: width=" << widthis() << " vs height=" << heightis()\
+ << endl;
+    };
+  };
+  Square(Point b1, double x) : Rectangle(b1,x,x) {};
+};
+-UU-:----F1  square2.cxx    16% L20    (C++/l Abbrev) ----------------------------------
+square2.cxx(34): error: no instance of constructor "Square::Square" matches the argument list
+            argument types are: ({...}, int, int)
+    Square sq2( {0.,0.}, 5,6);
+                ^
+square2.cxx(21): note: this candidate was rejected because mismatch in count of arguments
+  class Square : public Rectangle {
+        ^
+square2.cxx(21): note: this candidate was rejected because mismatch in count of arguments
+  class Square : public Rectangle {
+        ^
+square2.cxx(28): note: this candidate was rejected because mismatch in count of arguments
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+    ^
+square2.cxx(23): note: this candidate was rejected because arguments do not match
+    Square(Point b1, double x, double y) : Rectangle(b1,x,y) {
+    ^
+
+compilation aborted for square2.cxx (code 2)
+[eijkhout@isp02 examples]$ fg
+emacs discussion_square.txt
+
+[1]+  Stopped                 emacs discussion_square.txt
+[eijkhout@isp02 examples]$ icpc -o square2 square2.cxx 2>&1 | head -n 20
+square2.cxx(24): error: identifier "widthis" is undefined
+      if(widthis() != heightis()){
+         ^
+
+square2.cxx(24): error: identifier "heightis" is undefined
+      if(widthis() != heightis()){
+                      ^
+
+square2.cxx(32): error: no instance of constructor "Square::Square" matches the argument list
+            argument types are: ({...}, int)
+    Square sq1( {0.,0.}, 5);
+                ^
+square2.cxx(21): note: this candidate was rejected because mismatch in count of arguments
+  class Square : public Rectangle {
+        ^
+square2.cxx(21): note: this candidate was rejected because mismatch in count of arguments
+  class Square : public Rectangle {
+        ^
+square2.cxx(28): note: this candidate was rejected because arguments do not match
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+[eijkhout@isp02 examples]$ fg
+emacs discussion_square.txt
+
+[1]+  Stopped                 emacs discussion_square.txt
+[eijkhout@isp02 examples]$ icpc -o square2 square2.cxx 2>&1 | head -n 20
+square2.cxx(28): error: expected a ")"
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+                 ^
+
+square2.cxx(28): error: no default constructor exists for class "Square"
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+           ^
+
+square2.cxx(28): error: expected an identifier
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+                     ^
+
+square2.cxx(28): error: identifier "b1" is undefined
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+                                           ^
+
+square2.cxx(28): error: identifier "x" is undefined
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+                                              ^
+
+[eijkhout@isp02 examples]$ fg
+emacs discussion_square.txt
+
+[1]+  Stopped                 emacs discussion_square.txt
+[eijkhout@isp02 examples]$ icpc -o square2 square2.cxx 2>&1 | head -n 20
+square2.cxx(28): error: expected a ")"
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+                 ^
+
+square2.cxx(28): error: no default constructor exists for class "Square"
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+           ^
+
+square2.cxx(28): error: expected an identifier
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+                     ^
+
+square2.cxx(28): error: identifier "b1" is undefined
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+                                           ^
+
+square2.cxx(28): error: identifier "x" is undefined
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+                                              ^
+
+[eijkhout@isp02 examples]$ fg
+emacs discussion_square.txt
+
+[1]+  Stopped                 emacs discussion_square.txt
+[eijkhout@isp02 examples]$ icpc -o square2 square2.cxx 2>&1 | head -n 20
+square2.cxx(31): error: no instance of constructor "Square::Square" matches the argument list
+            argument types are: ({...}, int)
+    Square sq1( {0.,0.}, 5);
+                ^
+square2.cxx(21): note: this candidate was rejected because mismatch in count of arguments
+  class Square : public Rectangle {
+        ^
+square2.cxx(21): note: this candidate was rejected because mismatch in count of arguments
+  class Square : public Rectangle {
+        ^
+square2.cxx(27): note: this candidate was rejected because arguments do not match
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+    ^
+square2.cxx(23): note: this candidate was rejected because mismatch in count of arguments
+    Square(Point b1, double x, double y) : Rectangle(b1,x,y) {
+    ^
+
+square2.cxx(33): error: no instance of constructor "Square::Square" matches the argument list
+            argument types are: ({...}, int, int)
+    Square sq2( {0.,0.}, 5,6);
+[eijkhout@isp02 examples]$ fg
+emacs discussion_square.txt
+
+[1]+  Stopped                 emacs discussion_square.txt
+[eijkhout@isp02 examples]$ icpc -o square2 square2.cxx 2>&1 | head -n 20
+square2.cxx(31): error: no instance of constructor "Square::Square" matches the argument list
+            argument types are: ({...}, double)
+    Square sq1( {0.,0.}, 5.);
+                ^
+square2.cxx(21): note: this candidate was rejected because mismatch in count of arguments
+  class Square : public Rectangle {
+        ^
+square2.cxx(21): note: this candidate was rejected because mismatch in count of arguments
+  class Square : public Rectangle {
+        ^
+square2.cxx(27): note: this candidate was rejected because arguments do not match
+    Square(Point b1, double x) : Rectangle(b1,x,x) {};
+    ^
+square2.cxx(23): note: this candidate was rejected because mismatch in count of arguments
+    Square(Point b1, double x, double y) : Rectangle(b1,x,y) {
+    ^
+
+square2.cxx(33): error: no instance of constructor "Square::Square" matches the argument list
+            argument types are: ({...}, double, double)
+    Square sq2( {0.,0.}, 5.,6.);
+[eijkhout@isp02 examples]$

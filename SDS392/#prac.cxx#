@@ -1,0 +1,9 @@
+#include <iostream>
+using std::cout;
+using std::endl;
+int main() {
+  int i = -19,j=6;
+  cout <<i-(i/j)*j << endl;
+  cout << mop
+  return 0;
+}

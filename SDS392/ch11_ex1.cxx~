@@ -1,0 +1,58 @@
+#include <iostream>
+#include <cmath>
+using std::cin;
+using std::cout;
+using std::endl;
+
+class Point {
+private:
+  float x,y;
+public:
+  Point () {};
+  Point ( float x, float y ) : x(x), y(y){};
+  float px() { return x; };
+  float py() { return y; };
+  void setp (float newx, float newy) {x = newx; y = newy;}; 
+};
+
+class Rectangle {
+private: 
+  Point BL_point;
+  float w, h ;
+public:
+  Rectangle ( Point bl, float w, float h) { BL_point = bl; w = w; h = h; };
+  Rectangle ( Point bl, Point tr) { BL_point = bl; w = tr.px() - bl.px(); h = tr.py() - bl.py(); };
+  float area () { return w*h; };
+  float width () { return w; }; 
+  float height () { return h; };
+};
+
+
+int main() {
+  float bl_x, bl_y, tr_x, tr_y, w, h;
+  Point bl;
+  Point tr;
+  cout << "Enter (x,y) of bl: " << endl;
+  cin >> bl_x >> bl_y ;
+  bl.setp(bl_x,bl_y);
+  cout << "Enter width: " << endl;
+  cin >> w;
+  cout << "Enter height: " << endl;
+  cin >> h;
+  cout << "Enter (x,y) of p2: " << endl;
+  cin >> tr_x >> tr_y ;
+  tr.setp(tr_x,tr_y);
+  
+  Rectangle Rect1(bl,w,h);
+  cout << "Using first constructer: ";
+  cout << "Area: " << Rect1.area() << endl;
+  cout << "Width: " << Rect1.width() << endl;
+  cout << "Height: " << Rect1.height() << endl;
+
+  Rectangle Rect2(bl,tr);
+  cout << "Using first constructer: ";
+  cout << "Area: " << Rect2.area() << endl;
+  cout << "Width: " << Rect2.width() << endl;
+  cout << "Height: " << Rect2.height() << endl;
+  return 0;
+}

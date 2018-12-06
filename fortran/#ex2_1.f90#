@@ -1,0 +1,29 @@
+Program ex2_1
+  
+  implicit none
+  integer :: num
+
+  print *, 'Enter a number:'
+  read *, num
+
+ ! if (mod(num,3)==0) then
+  !   if (mod(num,5)==0) then
+   !     print *, "FizzBuzz"
+    ! else 
+     !   print *, "Fizz"
+    ! end if
+  else
+   !  print *, "Buzz"
+  !end if 
+  
+  if (mod(num,3)==0) then
+     if (mod(num,5)==0) then
+        print *, "FizzBuzz"
+     else 
+        print *, "Fizz"
+     end if
+  else
+     print *, "Buzz"
+  end if
+
+end Program ex2_1

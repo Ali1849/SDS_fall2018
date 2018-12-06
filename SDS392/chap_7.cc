@@ -1,0 +1,18 @@
+#include <iostream>
+#include <cmath>
+using std::cin;
+using std::cout;
+using std::endl;
+
+
+double distance_from_origin (double x,double y) {
+  double distance = sqrt(pow(x,2)+pow(y,2));
+  return distance;
+}
+int main() {
+  double x,y;
+  cout << "Enter point coordinates: " << endl;
+  cin >> x >> y;
+  cout << "The distance of ("<<x<<","<<y<<") from the origin is: "<<distance_from_origin(x,y)<<endl;
+  return 0;
+}

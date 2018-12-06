@@ -1,0 +1,25 @@
+%%%%%%%%%%%%%%%% good solution
+int nextprime (struct primesequence &seq){
+  do {
+    seq.last_number_tested += 1;
+  } while(!is_prime(seq.last_number_tested));
+  seq.number_of_primes_found += 1;
+  return seq.last_number_tested;
+}
+
+%%%%%%%%%%%%%%%% not what was asked
+void list_of_primes(primesequence sequence){
+  int divisors;	 
+  for (sequence.number_of_primes_found = 1; 
+       sequence.number_of_primes_found <= sequence.how_many;){
+    for (divisors = 2; divisors <= sequence.last_number_tested-1; divisors++)
+        if (sequence.last_number_tested%divisors == 0)
+          break;
+    if (divisors == sequence.last_number_tested)
+      {
+        sequence.number_of_primes_found++;
+        cout <<  sequence.last_number_tested << endl;
+      }
+    sequence.last_number_tested++;
+  }
+}

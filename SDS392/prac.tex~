@@ -1,0 +1,9 @@
+\documentclass{article}
+
+% C-c C-o  make block
+\begin{document}
+tis is tex
+\section{Introduction}
+
+\section{Conclusion}
+\end{document}

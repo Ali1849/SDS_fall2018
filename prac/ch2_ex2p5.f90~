@@ -1,0 +1,6 @@
+program hello
+  print *, "Hello World!"
+  print *, "sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss&
+&                             &
+&dsssssssssssssssssssssssssssssssssssss"
+end program hello

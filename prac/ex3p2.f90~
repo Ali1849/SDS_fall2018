@@ -1,0 +1,7 @@
+program ex3p2
+  implicit none
+  real :: v1 = 111.111, v2 = 222.222
+  v1 = v2
+  v2 = v1
+print *,v1,v2
+end program ex3p2

@@ -1,0 +1,28 @@
+#include <iostream>
+#include <cmath>
+using std::cin;
+using std::cout;
+using std::endl;
+
+class Point {
+private:
+  double px,py;
+public:
+  Point( double x, double y ){
+    px = x;
+    py = y;
+  };
+  float distance_to_origin(){ return sqrt(px*px+py*py); };
+  void printout(){ cout << px << py << endl;};
+  float angle(){ return atan(py/px); };
+};
+ 
+
+
+int main() {
+  Point p1(1,1);
+  p1.printout();
+  cout << "Distance from origin: " << p1.distance_to_origin() << endl;
+  cout << "Angle with x-axis: " << p1.angle() << endl;
+  return 0;
+}

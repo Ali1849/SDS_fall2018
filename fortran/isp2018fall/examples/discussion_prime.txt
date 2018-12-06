@@ -1,0 +1,110 @@
+%%%%%%%%%%%%%%% pretty much perfect: structure and naming
+bool is_prime (int input) {
+  for (int divisor=2; divisor<input; divisor++) {
+    if (input%divisor==0)
+      return false;
+  }
+  return true;
+}
+
+int main() {
+  cout << "Enter how many prime numbers";
+  cout << " you want listed: ";
+  int how_many;
+  cin >> how_many;
+  int number_of_primes_found = 0;
+  for (int currentNum=2; ; currentNum++) {
+    if (is_prime(currentNum)) {
+      cout << currentNum << endl;  //this loop counts by primes, but how to stop it at how_many?
+      number_of_primes_found = number_of_primes_found + 1;
+    }
+    if (number_of_primes_found>=how_many)
+      break;
+  }
+  return 0;
+}
+
+%%%%%%%%%%%% note the use of a variable and a single return
+
+bool is_prime(int n) {
+  bool prime_test = true;
+  for (int i = 2; i<n and prime_test; i++){
+    if (n%i == 0){
+      prime_test = false;
+    }
+  }
+  return prime_test;
+}
+
+%%%%%%%%%%%% messy code structure. the fact that it works is not the highest truth!
+bool primality(int n) {
+  int count=0;
+  if (n==1)
+    return false;
+  if (n==2)
+    return true;
+  if (n%2==0)
+    return false;
+  for (int i=1; i<=n; i++) {
+    if (n%i==0)
+      count++;
+  }
+  if (count==2)
+    return true;
+  else
+    return false;
+}
+
+%%%%%%%%%%%%% this conflates integers and booleans
+int primeTest (int integer) {
+
+  bool isPrime = true;
+
+  /*Use sqrt of n as an upper bound because no two numbers can multiply
+  to a number "n" without one of the multiples being less than or equal to the   sqrt of the number. Hence you can find a multiple of a number below its
+  sqrt making the search faster
+  */
+  for (int n = 2; n <= sqrt(integer); n++) {
+    if (integer % n == 0)
+      {
+        isPrime = false;
+        break;
+      }
+  }
+  return isPrime;
+}
+
+%%%%%%%%%%%%% this basically has the main program in a function. not what was asked
+int multiPrime(int num) {
+  bool isPrime = true;
+  int numPrimeFound = 0;
+  int prime = 2; //prime starts at 2
+
+  //runs until found however many primes we want to find
+  while (numPrimeFound < num) {
+
+    //finds prime number by testing if divisible by any number other than itself
+    for (int div = 2; div <= prime and isPrime; div++) {
+      if (prime % div == 0 && div != prime) { //makes sure 2,3,5... are prime
+        isPrime = false;
+      }
+    }
+    if (isPrime) {
+      //counts number of primes found
+      numPrimeFound++;
+      cout << prime << endl;
+    } else { //resets isPrime to be true to run loop again
+      isPrime = true;
+    }
+    prime++; //goes to the next number to see if it's prime
+  }
+}
+
+int main() {
+  int how_many;
+
+  cout << "Enter a number " << endl;
+  cin >> how_many;
+  multiPrime(how_many);
+}
+

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ $# -lt 1 ] ; then 
+  echo "You should have specified an argument"
+  exit 1
+fi
+
+# count the lines
+for f in *.$1 ; do
+  # use back tick to reverse execution order
+  count=`cat $f | wc -l`
+  if [ $count -gt 100 ] ; then
+    echo "making a backup of $f"
+    cp $f $f.bak
+  else
+    echo "we dont' care about $f"
+  fi
+done
+
+

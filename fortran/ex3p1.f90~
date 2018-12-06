@@ -1,0 +1,20 @@
+program ex3p1
+  implicit none 
+  logical :: isprime
+  integer :: n
+  print *, "Enter an integer number:"
+  read *, n
+  isprime = prime_test(n)
+  print *, isprime
+contains
+  logical function prime_test(n)
+    integer :: i,n
+    prime_test  = .false.
+    do i= 2, n-1
+       if ( mod(n,i)==0 ) then
+          prime_test = .true.
+          exit
+       end if
+    end do
+  end function prime_test
+end program ex3p1

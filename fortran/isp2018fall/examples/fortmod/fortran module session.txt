@@ -1,0 +1,213 @@
+####
+#### start by splitting a program over two files
+####
+
+File Edit Options Buffers Tools F90 Help
+Program moduledemo                     |module funcmodule
+ use funcmodule                        |contains
+ print *,myfunction()                  |  integer function myfunction()
+end Program moduledemo                 |    implicit none
+                                       |    myfunction = 5
+!! C-x 3 : split screen                |  end function myfunction
+!! C-x o : other panel                 |end module funcmodule
+                                       |
+!! C-z : suspend the editor            |
+!! fg : foreground (on Unix level)     |
+                                       |
+                                       |
+                                       |
+                                       |
+                                       |
+                                       |
+                                       |
+                                       |
+                                       |
+                                       |
+                                       |
+                                       |
+-UUU:----F1  prog.F90       All L11    |-UUU:----F1  mod.F90        All L8     (
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ # now I can no longer compile my program
+[eijkhout@isp02 fortmod]$ ifort -o prog prog.F90
+/tmp/ifortJI973F.o: In function `MAIN__':
+prog.F90:(.text+0x35): undefined reference to `funcmodule_mp_myfunction_'
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ # separate compilation needed:
+[eijkhout@isp02 fortmod]$ ifort -c mod.F90
+[eijkhout@isp02 fortmod]$ # this gives me:
+[eijkhout@isp02 fortmod]$ ls
+funcmodule.mod  mod.F90  mod.o  prog.F90  prog.F90~
+[eijkhout@isp02 fortmod]$ # see the ".mod" file?
+[eijkhout@isp02 fortmod]$ # now I do separate compilation of the main:
+[eijkhout@isp02 fortmod]$ ifort -c prog.F90
+[eijkhout@isp02 fortmod]$ # let's see what I have now:
+[eijkhout@isp02 fortmod]$ ls
+funcmodule.mod  mod.F90  mod.o  prog.F90  prog.F90~  prog.o
+[eijkhout@isp02 fortmod]$ # the .o files are "object files"
+[eijkhout@isp02 fortmod]$ # now I can link the object files:
+[eijkhout@isp02 fortmod]$ ifort -o myprogram prog.o mod.o
+[eijkhout@isp02 fortmod]$ ./myprogram
+           5
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ make clean
+rm -f *.o
+[eijkhout@isp02 fortmod]$ ls
+funcmodule.mod  Makefile  Makefile~  mod.F90  myprogram  prog.F90  prog.F90~
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ # I ahve made a make file:
+[eijkhout@isp02 fortmod]$ cat Makefile
+# this is a makefile for the fortran module demo
+
+myprogram : mod.o prog.o
+	ifort -o myprogram prog.o mod.o
+
+clean :
+	rm -f *.o *~
+
+[eijkhout@isp02 fortmod]$ # so now I can clean:
+[eijkhout@isp02 fortmod]$ make clean
+rm -f *.o *~
+[eijkhout@isp02 fortmod]$ ls
+funcmodule.mod  Makefile  mod.F90  myprogram  prog.F90
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ !m
+make clean
+rm -f *.o *~ *.mod
+[eijkhout@isp02 fortmod]$ !l
+ls
+Makefile  mod.F90  myprogram  prog.F90
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ make clean
+rm -f *.o *~ *.mod myprogram
+[eijkhout@isp02 fortmod]$ ls
+Makefile  mod.F90  prog.F90
+[eijkhout@isp02 fortmod]$ make myprogram
+make: *** No rule to make target `mod.o', needed by `myprogram'.  Stop.
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ make myprogram
+ifort -c mod.F90
+ifort -c prog.F90
+ifort -o myprogram prog.o mod.o
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ # makefile with all dependencies indicated:
+[eijkhout@isp02 fortmod]$ cat Makefile
+# this is a makefile for the fortran module demo
+
+myprogram : mod.o prog.o
+	ifort -o myprogram prog.o mod.o
+mod.o : mod.F90
+	ifort -c mod.F90
+prog.o : prog.F90
+	ifort -c prog.F90
+
+clean :
+	rm -f *.o *~ *.mod myprogram
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ make myprogram
+ifort -c mod.F90
+ifort -o myprogram prog.o mod.o
+[eijkhout@isp02 fortmod]$ ./myprogram
+          50
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ make clean
+rm -f *.o *~ *.mod myprogram
+[eijkhout@isp02 fortmod]$ make myprogram
+ifort -o mod.o mod.F90
+/opt/intel/compilers_and_libraries_2017.1.132/linux/compiler/lib/intel64_lin/for_main.o: In function `main':
+for_main.c:(.text+0x2a): undefined reference to `MAIN__'
+make: *** [mod.o] Error 1
+[eijkhout@isp02 fortmod]$ fg
+emacs prog.F90
+File Edit Options Buffers Tools Makefile Help
+# this is a makefile for the fortran m$|module funcmodule
+                                       |contains
+myprogram : mod.o prog.o               |  integer function myfunction()
+        ifort -o myprogram prog.o mod.$|    implicit none
+.SUFFIXES: .o .F90                     |    myfunction = 50
+%.o : %.F90                            |  end function myfunction
+        ifort -c -o $@ $^              |end module funcmodule
+# mod.o : mod.F90                      |
+#       ifort -c mod.F90               |
+# prog.o : prog.F90                    |
+#       ifort -c prog.F90              |
+                                       |
+clean :                                |
+        rm -f *.o *~ *.mod myprogram   |
+                                       |
+                                       |
+                                       |
+                                       |
+                                       |
+                                       |
+                                       |
+                                       |
+-UUU:----F1  Makefile       All L7     |-UUU:----F1  mod.F90        All L5     (
+
+[1]+  Stopped                 emacs prog.F90
+[eijkhout@isp02 fortmod]$ make myprogram
+ifort -c -o prog.o prog.F90
+ifort -o myprogram prog.o mod.o
+[eijkhout@isp02 fortmod]$ cat Makefile
+# this is a makefile for the fortran module demo
+
+myprogram : mod.o prog.o
+	ifort -o myprogram prog.o mod.o
+.SUFFIXES: .o .F90
+%.o : %.F90
+	ifort -c -o $@ $^
+# mod.o : mod.F90
+# 	ifort -c mod.F90
+# prog.o : prog.F90
+# 	ifort -c prog.F90
+
+clean :
+	rm -f *.o *~ *.mod myprogram
+[eijkhout@isp02 fortmod]$

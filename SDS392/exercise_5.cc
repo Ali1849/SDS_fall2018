@@ -1,0 +1,38 @@
+#include <iostream>
+using std::cin;
+using std::cout;
+using std::endl;
+int main() {
+  int N;
+  cout << "Enter a number:" << endl;
+  cin >> N;
+  bool first_pair=false;
+  bool second_pair=false;
+  for(int i=0;i<10;i++){
+    for(int j=0;j<10;j++){
+      if(i*j>N){
+	cout<<"first pair=("<<i<<","<<j<<")"<<endl;
+	first_pair=true;
+	break;
+      }
+    }
+    if(first_pair){
+      break;
+    }
+  }
+  
+  for(int sum=1;sum<19;sum++){
+    for(int i=0;i<10&&i<=sum;i++){
+      int j=sum-i;
+      if(i*j>N){
+	cout<<"second_pair=("<<i<<","<<j<<")"<<endl;
+	second_pair=true;
+	break;
+      }
+    }
+    if(second_pair){
+      break;
+    }
+  }
+  return 0;
+}

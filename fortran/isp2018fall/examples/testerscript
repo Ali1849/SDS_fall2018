@@ -1,0 +1,28 @@
+#!/bin/bash
+
+if [ $# -lt 1 ] ; then 
+  echo "You should have specified an argument"
+  exit 1
+fi
+
+if [ ! -f $1 ] ; then
+  echo "File does not exist!"
+  exit 1
+fi
+
+echo "We are going to test program $1"
+
+icpc -o testprogram $1
+# >/dev/null 2&>1
+
+if [ ! -f "testprogram" ] ; then
+  echo "Compilation failed"
+  exit 1
+fi
+
+if [ `./testprogram | grep 179 | wc -l` -eq 1 ] ; then
+  echo "Yay!"
+else
+  echo "boo"
+fi
+

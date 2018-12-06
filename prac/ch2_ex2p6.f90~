@@ -1,0 +1,10 @@
+program ex2p6
+implicit none
+!variable decleration
+real :: x,y,z
+
+print *, "Enter 3 numbers: "
+read *, x,y,z
+print *, "Numbers are: ",x,y,z
+
+end ex2p6

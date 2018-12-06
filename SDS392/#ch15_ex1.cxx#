@@ -1,0 +1,22 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
+using std::cin;
+using std::cout;
+using std::endl;
+using std::vector;
+
+void swapij (int* addr_i, int* addr_j){
+  int temp = *addr_i;
+  i = 
+  
+}
+
+int main() {
+  int i = 1, j = 2;
+  swqpij(i,j);
+  cout << "check that i is 2: " << i << endl;
+  cout << "check that j is 1: " << i << endl;
+  return 0;
+}
+

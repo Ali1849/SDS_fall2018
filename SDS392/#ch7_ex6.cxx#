@@ -1,0 +1,20 @@
+#include <iostream>
+using std::cin;
+using std::cout;
+using std::endl;
+
+bool is_divisible (int number, int divisor, int remainder){
+  bool divisibility = false;
+  remainder = number%divisor;
+  if ( number%divisor  ){
+    divisibility = true;
+   
+  }
+}
+int main() {
+  int i = 2, j = 3;
+  cout << "Before Swap: (i,j) = (" <<i<<","<<j<<")"<<endl;
+  swapij(i,j);
+  cout << "After Swap:  (i,j) = (" <<i<<","<<j<<")"<<endl;
+  return 0;
+}

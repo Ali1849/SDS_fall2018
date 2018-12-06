@@ -1,0 +1,36 @@
+#include <iostream>
+using std::cin;
+using std::cout;
+using std::endl;
+
+bool is_prime(int n) {
+  bool prime_test = true;
+  for (int i = 2; i<n and prime_test; i++){
+    if (n%i == 0){
+      prime_test = false;
+    }
+  }
+  return prime_test;
+}
+
+struct primesequence {int number_of_primes_found; int last_number_tested;};
+int nextprime (struct primesequence &seq){
+  do { 
+    seq.last_number_tested += 1;
+  } while(!is_prime(seq.last_number_tested));
+  seq.number_of_primes_found += 1;
+  return seq.last_number_tested;
+}
+
+
+int main(){
+  int number_of_primes;
+  cout << "Enter number of primes:" << endl;
+  cin >> number_of_primes;
+  struct primesequence sequence = {0,1};
+  while ( sequence.number_of_primes_found < number_of_primes ){
+    int number = nextprime (sequence);
+    cout << "Number " << number << " is prime." << endl;
+  }
+  return 0;
+}
